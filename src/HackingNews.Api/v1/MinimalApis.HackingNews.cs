@@ -14,9 +14,7 @@ public partial class MinimalApis
         {
             var hackingNewsViewList = await mediator.Send(new HackingNewsQuery(request.NumOfStories));
 
-            var response = hackingNewsViewList.Map();
-
-            return ReturnHttpResponse(response);
+            return ReturnHttpResponse(hackingNewsViewList.Map());
 
         }).Produces(200)
             .ProducesProblem(400)

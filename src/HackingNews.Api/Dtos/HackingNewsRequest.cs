@@ -7,20 +7,24 @@ public class HackingNewsRequest
     public int NumOfStories { get; set; }
 
     /// <summary>
-    /// Custom binding for BestStories mapping https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-8.0
-    /// At least one story is returned if the parameter is not provided or invalid
+    /// Custom model binder to bind and validate the query parameter "numofstories"
     /// </summary>
     /// <param name="context"></param>
     /// <param name="parameter"></param>
     /// <returns></returns>
-    public static ValueTask<HackingNewsRequest> BindAsync(HttpContext context, ParameterInfo parameter)
+    public static async ValueTask<HackingNewsRequest?> BindAsync(HttpContext context, ParameterInfo parameter)
     {
-        int bestStories = int.TryParse(context.Request.Query["numofstories"], out int bs) ? bs : 1;
+        if (!int.TryParse(context.Request.Query["numofstories"], out int bestStories))
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.CompleteAsync();
+            return null;
+        }
 
         var result = new HackingNewsRequest
         {
             NumOfStories = bestStories
         };
-        return ValueTask.FromResult(result);
+        return await ValueTask.FromResult(result);
     }
 }
