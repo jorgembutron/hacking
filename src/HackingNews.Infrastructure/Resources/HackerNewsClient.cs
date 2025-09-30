@@ -16,7 +16,7 @@ public partial class HackerNewsClient(HttpClient httpClient, ILogger<HackerNewsC
     /// <returns>A list of strings containing the IDs of Hacker News items. Returns an empty list if no items are found.</returns>
     public async Task<IList<int>> ReturnHackingNewsIdsAsync()
     {
-        var requestUri = $"{"v0/"}";
+        var requestUri = $"{"v0/beststories.json"}";
 
         var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 

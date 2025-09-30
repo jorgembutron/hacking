@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 
-namespace HackingNews.Api.v1.RequestDtos;
+namespace HackingNews.Api.Dtos;
 
 public class HackingNewsRequest
 {
-    public int? BestStories { get; set; }
+    public int NumOfStories { get; set; }
 
     /// <summary>
     /// Custom binding for BestStories mapping https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-8.0
@@ -15,11 +15,11 @@ public class HackingNewsRequest
     /// <returns></returns>
     public static ValueTask<HackingNewsRequest> BindAsync(HttpContext context, ParameterInfo parameter)
     {
-        int bestStories = int.TryParse(context.Request.Query["bestStories"], out int bs) ? bs : 1;
+        int bestStories = int.TryParse(context.Request.Query["numofstories"], out int bs) ? bs : 1;
 
         var result = new HackingNewsRequest
         {
-            BestStories = bestStories
+            NumOfStories = bestStories
         };
         return ValueTask.FromResult(result);
     }

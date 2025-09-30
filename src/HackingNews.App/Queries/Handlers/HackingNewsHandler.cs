@@ -1,40 +1,35 @@
-﻿using HackingNews.App.Dtos;
-using HackingNews.Domain.Abstractions;
+﻿using HackingNews.Domain.Abstractions;
 using HackingNews.Infrastructure.Views;
 using MediatR;
 
-namespace HackingNews.App.Queries.Handlers
+namespace HackingNews.App.Queries.Handlers;
+
+public class HackingNewsHandler : IRequestHandler<HackingNewsQuery, IList<HackingNewsView>>
 {
-    public class HackingNewsHandler : IRequestHandler<HackingNewsQuery, HackingNewsResponse>
+    private readonly IBestStoriesService _bestStoriesService;
+    private readonly IProviderClientFactory<HackingNewsView> _providerClient;
+
+    public HackingNewsHandler(
+        IBestStoriesService bestStoriesService,
+        IProviderClientFactory<HackingNewsView> providerClient)
     {
-        private readonly IInMemHackingNewsService _inMemHackingNewsService;
-        private readonly IHackerNewsClient<HackingNewsView> _hackerNewsClient;
+        _bestStoriesService = bestStoriesService;
+        _providerClient = providerClient;
+    }
 
-        public HackingNewsHandler(
-            IInMemHackingNewsService inMemHackingNewsService,
-            IHackerNewsClient<HackingNewsView> hackerNewsClient)
-        {
-            _inMemHackingNewsService = inMemHackingNewsService;
-            _hackerNewsClient = hackerNewsClient;
-        }
+    public async Task<IList<HackingNewsView>> Handle(HackingNewsQuery request, CancellationToken cancellationToken)
+    {
+        var client = _providerClient.Create();
 
-        public async Task<HackingNewsResponse> Handle(HackingNewsQuery request, CancellationToken cancellationToken)
-        {
-            var ids = _inMemHackingNewsService.HackingNewsIds;
+        var ids = _bestStoriesService.GetHackerNewsBestStories();
 
-            var stories = await _hackerNewsClient.ReturnHackingNewsAsync(request.bestStories, ids);
+        var stories = await client.ReturnHackingNewsAsync(request.NumOfStories, ids);
 
-            var topStories = stories
-                //.Where(s => s != null)
-                .OrderByDescending(s => s.Score)
-                .Take(request.bestStories)
-                .ToList();
+        var topStories = stories
+            .OrderByDescending(s => s.Score)
+            .Take(request.NumOfStories)
+            .ToList();
 
-
-            return new HackingNewsResponse
-            {
-                
-            };
-        }
+        return topStories;
     }
 }

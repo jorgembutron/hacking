@@ -1,4 +1,7 @@
-﻿using HackingNews.Infrastructure.Resources;
+﻿using HackingNews.Domain.Abstractions;
+using HackingNews.Infrastructure.Factories;
+using HackingNews.Infrastructure.Resources;
+using HackingNews.Infrastructure.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
@@ -8,10 +11,11 @@ namespace HackingNews.Infrastructure.Extensions;
 
 public static class InfrastructureServiceRegistration
 {
-    public static void AddApplicationServices(this IServiceCollection serviceCollection,
+    public static void AddInfrastructureServices(this IServiceCollection serviceCollection,
         IConfiguration configuration)
     {
         // Add infrastructure services here
+        serviceCollection.AddSingleton<IProviderClientFactory<HackingNewsView>, ProviderClientFactory>();
         serviceCollection.AddHttpClient<HackerNewsClient>(ConfigureHackingNewsHttpClient);
     }
 

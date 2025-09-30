@@ -12,14 +12,14 @@ public class InMemHackingNewsService : IInMemHackingNewsService
     public InMemHackingNewsService(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
-        _ = GetSustainabilityIndicators();
+        GetHackerNewsBestStories();
     }
 
-    private async Task GetSustainabilityIndicators()
+    private void GetHackerNewsBestStories()
     {
         var scope = _serviceScopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<HackerNewsClient>();
 
-        HackingNewsIds = await context.ReturnHackingNewsIdsAsync();
+        HackingNewsIds = context.ReturnHackingNewsIdsAsync().Result;
     }
 }

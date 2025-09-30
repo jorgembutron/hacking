@@ -1,4 +1,5 @@
-﻿using HackingNews.Api.v1.RequestDtos;
+﻿using HackingNews.Api.Dtos;
+using HackingNews.Api.Extensions;
 using HackingNews.App.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +8,17 @@ namespace HackingNews.Api.v1;
 
 public partial class MinimalApis
 {
-    public static void MinimalApiGhgProtocolEndPoints(this WebApplication app)
+    public static void HackerNewsEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/repairs/ghgprotocol/status", async (HackingNewsRequest request, IMediator mediator) =>
-                {
-                    var calculationStatus =
-                        await mediator.Send(new HackingNewsQuery(request.BestStories));
+        app.MapGet("v1/hackernews/", async (HackingNewsRequest request, IMediator mediator) =>
+        {
+            var hackingNewsViewList = await mediator.Send(new HackingNewsQuery(request.NumOfStories));
 
-                    return ReturnHttpResponse(calculationStatus);
+            var response = hackingNewsViewList.Map();
 
-                }).Produces(200)
+            return ReturnHttpResponse(response);
+
+        }).Produces(200)
             .ProducesProblem(400)
             .WithOpenApi();
     }

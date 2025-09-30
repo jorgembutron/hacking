@@ -12,5 +12,6 @@ public static class ApplicationServiceRegistration
         // Add application services here
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddSingleton<IInMemHackingNewsService, InMemHackingNewsService>();
+        services.AddScoped<IBestStoriesService, BestStoriesService>();
     }
 }
