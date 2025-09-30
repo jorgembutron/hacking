@@ -4,7 +4,7 @@
     {
         public static void MinimalApiVerEndpoints(this WebApplication app)
         {
-            app.MapGet("/version", async () => await Task.FromResult(Results.Ok("version 0.1.0")))
+            app.MapGet("v1/version", async () => await Task.FromResult(Results.Ok("version 0.1.0")))
                 .WithName("Get number version")
                 .WithOpenApi();
         }
