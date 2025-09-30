@@ -2,5 +2,5 @@
 
 public interface IInMemHackingNewsService
 {
-    IList<string> HackingNewsIds { get; set; }
+    IList<int> HackingNewsIds { get; set; }
 }

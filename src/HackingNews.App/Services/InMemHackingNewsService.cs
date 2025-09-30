@@ -7,7 +7,7 @@ namespace HackingNews.App.Services;
 public class InMemHackingNewsService : IInMemHackingNewsService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    public IList<string> HackingNewsIds { get; set; }
+    public IList<int> HackingNewsIds { get; set; }
 
     public InMemHackingNewsService(IServiceScopeFactory serviceScopeFactory)
     {
