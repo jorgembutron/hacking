@@ -1,1 +1,6 @@
-<Solution />
+<Solution>
+  <Project Path="src/HackingNews.Api/HackingNews.Api.csproj" Id="72fc9f96-6984-4802-9c91-2375e0afe308" />
+  <Project Path="src/HackingNews.App/HackingNews.App.csproj" Id="60cbf170-191d-4795-9841-4c7969201543" />
+  <Project Path="src/HackingNews.Domain/HackingNews.Domain.csproj" Id="09c0ce1f-161b-4417-9350-24c0e375ba56" />
+  <Project Path="src/HackingNews.Infrastructure/HackingNews.Infrastructure.csproj" Id="a82eb118-c570-4eba-b6bb-7e5f57328ef5" />
+</Solution>
