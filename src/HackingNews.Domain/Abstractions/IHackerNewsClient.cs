@@ -2,6 +2,6 @@
 
 public interface IHackerNewsClient<TReturn>
 {
-    Task<TReturn> ReturnHackingNewsAsync(int numOfStories, IList<int> ids);
+    Task<IList<TReturn>> ReturnHackingNewsAsync(int numOfStories, IList<int> ids);
     Task<IList<string>> ReturnHackingNewsIdsAsync();
 }

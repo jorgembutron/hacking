@@ -3,7 +3,6 @@ using HackingNews.Domain.CustomExceptions;
 using HackingNews.Infrastructure.Views;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Web;
 
 namespace HackingNews.Infrastructure.Resources;
 
@@ -36,20 +35,19 @@ public partial class HackerNewsClient(HttpClient httpClient, ILogger<HackerNewsC
     /// <param name="numOfStories"></param>
     /// <param name="idList"></param>
     /// <returns></returns>
-    public async Task<HackingNewsView> ReturnHackingNewsAsync(int numOfStories, IList<int> idList)
+    public async Task<IList<HackingNewsView>> ReturnHackingNewsAsync(int numOfStories, IList<int> idList)
     {
         //Use configuration for the URL and parameters
         var requestUri = $"{"v0/item/"}";
 
         var result = idList.Select(id => GeHackingNewsStoriesDetailAsync($"{requestUri}{id}.json")).ToList();
 
-        var stories = await Task.WhenAll(result);
+        List<HackingNewsView> stories = (await Task.WhenAll(result)).ToList();
 
-
-        return stories ?? new HackingNewsView();
+        return stories;
     }
 
-    private async Task<HackingNewsView?> GeHackingNewsStoriesDetailAsync(string requestUri)
+    private async Task<HackingNewsView> GeHackingNewsStoriesDetailAsync(string requestUri)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
@@ -59,7 +57,7 @@ public partial class HackerNewsClient(HttpClient httpClient, ILogger<HackerNewsC
 
         var response = JsonConvert.DeserializeObject<HackingNewsView>(responseContent);
 
-        return response;
+        return response ?? new HackingNewsView();
     }
 
 
