@@ -1,6 +1,6 @@
 @HackingNews.Api_HostAddress = https://localhost:7262
 
-GET {{HackingNews.Api_HostAddress}}/v1/hackernews?NumOfStories=0
+GET {{HackingNews.Api_HostAddress}}/v1/hackernews?NumOfStories=10
 Accept: application/json
 
 ###

@@ -11,20 +11,20 @@ public partial class HackerNewsClient : IExceptionManager<Exception>
     {
         logger.LogWarning(ex, ex.Message);
 
-        if (ex is not HackingNewsProviderException gpe)
+        if (ex is not HackingNewsProviderException pex)
             throw new Exception(ex.Message, ex);
 
-        switch (gpe.StatusCode)
+        switch (pex.StatusCode)
         {
             case HttpStatusCode.BadRequest:
             case HttpStatusCode.UnprocessableEntity:
             case HttpStatusCode.Conflict:
             case HttpStatusCode.NotFound:
-                throw new HackingNewsProviderException(gpe.StatusCode, "GlobalLocation API returned an error");
+                throw new HackingNewsProviderException(pex.StatusCode, "GlobalLocation API returned an error");
             case HttpStatusCode.TooManyRequests:
                 //throw new RateLimitException(gpe.Message);
             default:
-                throw new Exception(gpe.Message, gpe);
+                throw new Exception(pex.Message, pex);
         }
 
     }

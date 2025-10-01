@@ -2,14 +2,9 @@
 
 namespace HackingNews.Domain.CustomExceptions;
 
-public class HackingNewsProviderException : Exception
+public class HackingNewsProviderException(HttpStatusCode statusCode, string message) : Exception(message)
 {
-    public HttpStatusCode StatusCode { get; }
-
-    public HackingNewsProviderException(HttpStatusCode statusCode, string readAsStringAsync)
-    {
-        StatusCode = statusCode;
-    }
+    public HttpStatusCode StatusCode { get; } = statusCode;
 
     public override string ToString() => StatusCode.ToString();
 }

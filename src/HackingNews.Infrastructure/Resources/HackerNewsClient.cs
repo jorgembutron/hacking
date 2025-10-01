@@ -14,7 +14,7 @@ public partial class HackerNewsClient(HttpClient httpClient, ILogger<HackerNewsC
     /// Asynchronously retrieves a list of Hacker News item IDs from the service.
     /// </summary>
     /// <returns>A list of strings containing the IDs of Hacker News items. Returns an empty list if no items are found.</returns>
-    public async Task<IList<int>> ReturnHackingNewsIdsAsync()
+    public async Task<IList<int>> GetHackingNewsIdsAsync()
     {
         var requestUri = $"{"v0/beststories.json"}";
 
@@ -30,21 +30,20 @@ public partial class HackerNewsClient(HttpClient httpClient, ILogger<HackerNewsC
     }
 
     /// <summary>
-    /// 
+    /// ToDo: Add fault transient support
+    /// ToDo: Store each error?
+    /// ToDo: FallBack implementation?
     /// </summary>
-    /// <param name="numOfStories"></param>
     /// <param name="idList"></param>
     /// <returns></returns>
-    public async Task<IList<HackingNewsView>> ReturnHackingNewsAsync(int numOfStories, IList<int> idList)
+    public async Task<IList<HackingNewsView>> GetHackingNewsStoriesDetailAsync(IList<int> idList)
     {
-        //Use configuration for the URL and parameters
+        //Use configuration settings for the URL and parameters
         var requestUri = $"{"v0/item/"}";
 
-        var result = idList.Select(id => GeHackingNewsStoriesDetailAsync($"{requestUri}{id}.json")).ToList();
+        var result = idList.Select(id => GetDataAsync($"{requestUri}{id}.json"));
 
-        List<HackingNewsView> stories = (await Task.WhenAll(result)).ToList();
-
-        return stories;
+        return (await Task.WhenAll(result)).ToList();
     }
 
     /// <summary>
@@ -54,7 +53,7 @@ public partial class HackerNewsClient(HttpClient httpClient, ILogger<HackerNewsC
     /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="HackingNewsView"/>
     /// object with the story details. Returns a new <see cref="HackingNewsView"/> if the response content is null or
     /// cannot be deserialized.</returns>
-    private async Task<HackingNewsView> GeHackingNewsStoriesDetailAsync(string requestUri)
+    private async Task<HackingNewsView> GetDataAsync(string requestUri)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
@@ -66,7 +65,6 @@ public partial class HackerNewsClient(HttpClient httpClient, ILogger<HackerNewsC
 
         return response ?? new HackingNewsView();
     }
-
 
     /// <summary>
     /// 

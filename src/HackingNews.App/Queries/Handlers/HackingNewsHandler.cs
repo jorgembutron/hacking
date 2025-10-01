@@ -19,17 +19,22 @@ public class HackingNewsHandler : IRequestHandler<HackingNewsQuery, IList<Hackin
 
     public async Task<IList<HackingNewsView>> Handle(HackingNewsQuery request, CancellationToken cancellationToken)
     {
+        var listOfIds = _bestStoriesService.GetHackerNewsBestStories();
+
         var client = _providerClient.Create();
 
-        var ids = _bestStoriesService.GetHackerNewsBestStories();
+        if (client != null)
+        {
+            var stories = await client.GetHackingNewsStoriesDetailAsync(listOfIds);
 
-        var stories = await client.ReturnHackingNewsAsync(request.NumOfStories, ids);
+            var topStories = stories
+                .OrderByDescending(s => s.Score)
+                .Take(request.NumOfStories)
+                .ToList();
 
-        var topStories = stories
-            .OrderByDescending(s => s.Score)
-            .Take(request.NumOfStories)
-            .ToList();
+            return topStories;
+        }
 
-        return topStories;
+        throw new Exception("Unable to resolve the provider.");
     }
 }

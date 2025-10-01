@@ -25,4 +25,3 @@ public static class InfrastructureServiceRegistration
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
     }
 }
-

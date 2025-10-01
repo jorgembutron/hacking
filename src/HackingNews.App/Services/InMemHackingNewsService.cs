@@ -20,6 +20,6 @@ public class InMemHackingNewsService : IInMemHackingNewsService
         var scope = _serviceScopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<HackerNewsClient>();
 
-        HackingNewsIds = context.ReturnHackingNewsIdsAsync().Result;
+        HackingNewsIds = context.GetHackingNewsIdsAsync().Result;
     }
 }
